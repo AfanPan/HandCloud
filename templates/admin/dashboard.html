@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户管理后台</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <!-- 引入图标库 -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 头部导航 -->
+        <header class="admin-header">
+            <h1 class="admin-title">
+                <i class="ri-dashboard-line"></i>
+                用户管理系统
+            </h1>
+            <div class="action-buttons">
+                <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">
+                    <i class="ri-logout-box-line"></i>
+                    安全退出
+                </a>
+            </div>
+        </header>
+
+        <!-- 数据概览 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">
+                    <i class="ri-user-line"></i>
+                    总用户数
+                </div>
+                <div class="stat-value">{{ total_users }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">
+                    <i class="ri-time-line"></i>
+                    最近新增
+                </div>
+                <div class="stat-value">{{ recent_users }}</div>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <input 
+                type="text" 
+                class="search-input"
+                placeholder="搜索用户..."
+                id="searchInput"
+            >
+            <button class="btn btn-edit" onclick="filterTable()">
+                <i class="ri-search-line"></i>
+                搜索
+            </button>
+        </div>
+
+        <!-- 用户表格 -->
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>用户ID</th>
+                    <th>用户名</th>
+                    <th>注册时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if users %}
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[3] | datetimeformat }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="#" class="btn btn-edit">
+                                    <i class="ri-edit-line"></i>
+                                    编辑
+                                </a>
+                                <a 
+                                    href="/admin/delete/{{ user[0] }}" 
+                                    class="btn btn-danger"
+                                    onclick="return confirmDelete()"
+                                >
+                                    <i class="ri-delete-bin-line"></i>
+                                    删除
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <i class="ri-database-line" style="font-size: 3rem;"></i>
+                                <p>暂无用户数据</p>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- 分页 -->
+        <div class="pagination">
+            {% for page in pagination.iter_pages() %}
+                {% if page %}
+                    <a 
+                        href="{{ url_for('admin_dashboard', page=page) }}" 
+                        class="page-item {% if page == pagination.page %}active{% endif %}"
+                    >
+                        {{ page }}
+                    </a>
+                {% else %}
+                    <span class="page-item">...</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // 删除确认
+        function confirmDelete() {
+            return confirm('确定要删除此用户吗？该操作不可恢复！');
+        }
+
+        // 实时搜索
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const table = document.querySelector('.users-table');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName('td')[1];
+                if (td) {
+                    const txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toUpperCase().includes(filter) ? '' : 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

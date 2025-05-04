@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户管理系统 - 管理员登录</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <!-- 系统标识 -->
+        <div class="system-brand">
+            <span class="brand-icon">🚀</span>
+            <h1 class="brand-title">用户管理系统</h1>
+            <p class="brand-slogan">安全·高效·智能</p>
+        </div>
+
+        <!-- 通知系统 -->
+        <div class="notification-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="notification {{ category }} active">
+                        <div class="notification-content">
+                            {{ message }}
+                        </div>
+                        <div class="notification-close"></div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- 登录表单 -->
+        <form method="POST" class="auth-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="form-group">
+                <div class="input-with-icon">
+                    <span class="input-icon">🔑</span>
+                    <input 
+                        type="password" 
+                        id="secret_key" 
+                        name="secret_key" 
+                        placeholder="请输入访问密钥"
+                        required>
+                </div>
+            </div>
+
+            <button type="submit" class="auth-button">
+                <span class="button-icon">🛡️</span>
+                安全登录后台
+            </button>
+        </form>
+
+        <!-- 安全提示 -->
+        <div class="security-tips">
+            <span class="tip-icon">⚠️</span>
+            <p>本系统采用AES-256加密协议保障数据安全</p>
+        </div>
+    </div>
+</body>
+</html>

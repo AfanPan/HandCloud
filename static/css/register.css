@@ -1,0 +1,148 @@
+/* 基础重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* 页面渐变背景 */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 表单容器 */
+.register-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    margin: 1rem;
+}
+
+/* 标题样式 */
+.register-title {
+    text-align: center;
+    color: #2d3748;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    letter-spacing: -0.5px;
+}
+
+/* 表单组样式 */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* 输入框样式 */
+.input-field {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 验证码区域 */
+.captcha-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.captcha-display {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.captcha-display:hover {
+    transform: scale(1.05);
+}
+
+/* 提交按钮 */
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-top: 1.5rem;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+}
+
+/* 错误提示 */
+.error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .register-container {
+        padding: 1.5rem;
+    }
+    
+    .captcha-group {
+        flex-direction: column;
+    }
+    
+    .captcha-display {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+/* 验证码刷新动画 */
+@keyframes captchaRefresh {
+    0% { opacity: 0.5; transform: rotate(0deg) scale(0.9); }
+    50% { opacity: 1; transform: rotate(5deg) scale(1.05); }
+    100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+/* 输入错误状态 */
+.input-error {
+    border-color: #e53e3e !important;
+    background: #fff5f5;
+}
+
+.input-error:focus {
+    box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1) !important;
+}

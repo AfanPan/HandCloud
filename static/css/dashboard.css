@@ -1,0 +1,162 @@
+/* 基础布局 */
+.admin-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* 头部导航 */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.admin-title {
+    font-size: 1.5rem;
+    color: #2d3748;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 数据概览卡片 */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin: 0.5rem 0;
+}
+
+.stat-label {
+    color: #718096;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 用户表格 */
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.users-table th,
+.users-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.users-table th {
+    background: #f7fafc;
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.users-table tr:hover {
+    background: #f7fafc;
+}
+
+/* 操作按钮 */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-danger {
+    background: #fc8181;
+    color: #c53030;
+}
+
+.btn-danger:hover {
+    opacity: 0.9;
+}
+
+.btn-edit {
+    background: #90cdf4;
+    color: #2b6cb0;
+}
+
+/* 搜索栏 */
+.search-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* 分页样式 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.page-item {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+}
+
+.page-item.active {
+    background: #4299e1;
+    color: white;
+    border-color: #4299e1;
+}
+
+/* 空状态提示 */
+.empty-state {
+    text-align: center;
+    padding: 4rem 0;
+    color: #718096;
+}

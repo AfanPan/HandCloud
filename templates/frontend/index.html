@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span style="display: block; margin-bottom: 1rem;">🚀 用户管理系统</span>
+                安全 · 高效 · 智能
+            </h1>
+            
+            <div class="action-buttons">
+                <a href="{{ url_for('register') }}" class="action-button">
+                    <span class="button-icon">📝</span>
+                    <span class="button-text">立即注册</span>
+                </a>
+                <a href="{{ url_for('admin_login') }}" class="action-button">
+                    <span class="button-icon">🔑</span>
+                    <span class="button-text">管理登录</span>
+                </a>
+            </div>
+
+            <!-- 新增云解决方案广告区块 -->
+            <div class="cloud-solution">
+                <div class="solution-card">
+                    <span class="solution-icon">☁️</span>
+                    <h3>云端智能管理解决方案</h3>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <span class="feature-icon">🚀</span>
+                            <p>弹性计算资源<br>按需扩展</p>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🛡️</span>
+                            <p>军事级数据安全<br>99.99%可用性</p>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📊</span>
+                            <p>智能成本优化<br>节省30%IT支出</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="resource-dashboard">
+                <div class="dashboard-header">
+                    <span class="dashboard-icon">📊</span>
+                    <h3>云主机实时状态</h3>
+                    <div class="refresh-time">最后更新: <span id="refresh-time">正在连接...</span></div>
+                </div>
+                
+                <div class="metric-grid">
+                    <!-- CPU监控 -->
+                    <div class="metric-card cpu">
+                        <div class="metric-header">
+                            <span class="metric-icon">⚙️</span>
+                            <span class="metric-title">CPU负载</span>
+                        </div>
+                        <div class="metric-body">
+                            <div class="progress-bar" style="width: 0%">
+                                <span>0%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 内存监控 -->
+                    <div class="metric-card memory">
+                        <div class="metric-header">
+                            <span class="metric-icon">🧠</span>
+                            <span class="metric-title">内存占用</span>
+                        </div>
+                        <div class="metric-body">
+                            <div class="progress-bar" style="width: 0%">
+                                <span>0/0GB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 磁盘监控 -->
+                    <div class="metric-card storage">
+                        <div class="metric-header">
+                            <span class="metric-icon">💾</span>
+                            <span class="metric-title">磁盘空间</span>
+                        </div>
+                        <div class="metric-body">
+                            <div class="progress-bar" style="width: 0%">
+                                <span>0/0GB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 网络监控 -->
+                    <div class="metric-card network">
+                        <div class="metric-header">
+                            <span class="metric-icon">📡</span>
+                            <span class="metric-title">网络流量</span>
+                        </div>
+                        <div class="metric-body">
+                            <div class="traffic-lights">
+                                <div class="upload">↑ 0 KB/s</div>
+                                <div class="download">↓ 0 KB/s</div>
+                            </div>
+                        </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

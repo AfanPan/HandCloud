@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云电脑服务中心</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/core.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<!-- 在base.html的</body>前添加 -->
+<script>
+    // 实时监控功能
+    document.addEventListener('DOMContentLoaded', function() {
+        let lastNetwork = { sent: 0, recv: 0, timestamp: 0 }
+    
+        function updateSystemStatus() {
+            fetch('/api/system_status')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network error');
+                    return response.json()
+                })
+                .then(data => {
+                    // 更新CPU
+                    updateMetric('.cpu .progress-bar', data.cpu_percent)
+                    
+                    // 更新内存
+                    updateMetric('.memory .progress-bar', data.memory.percent)
+                    document.querySelector('.memory span').innerHTML = 
+                        `${data.memory.used.toFixed(1)}/${data.memory.total}GB`
+                    
+                    // 更新磁盘
+                    updateMetric('.storage .progress-bar', data.disk.percent)
+                    document.querySelector('.storage span').innerHTML = 
+                        `${data.disk.used.toFixed(1)}/${data.disk.total}GB`
+                    
+                    // 计算网络速度
+                    const interval = (Date.now()/1000 - lastNetwork.timestamp) || 1
+                    const sentSpeed = (data.network.sent - lastNetwork.sent)/interval
+                    const recvSpeed = (data.network.recv - lastNetwork.recv)/interval
+                    
+                    // 更新网络显示
+                    document.querySelector('.upload').innerHTML = 
+                        `↑ ${formatSpeed(sentSpeed)}`
+                    document.querySelector('.download').innerHTML = 
+                        `↓ ${formatSpeed(recvSpeed)}`
+                    
+                    // 保存当前网络数据
+                    lastNetwork = {
+                        sent: data.network.sent,
+                        recv: data.network.recv,
+                        timestamp: Date.now()/1000
+                    }
+                    
+                    // 更新时间戳
+                    document.getElementById('refresh-time').textContent = 
+                        `${Math.round((Date.now()/1000 - data.timestamp))}s前`
+                })
+                .catch(error => {
+                    console.error('监控数据获取失败:', error)
+                    document.getElementById('refresh-time').textContent = '连接异常'
+                })
+        }
+    
+        function updateMetric(selector, percent) {
+            const element = document.querySelector(selector)
+            element.style.width = `${percent}%`
+            element.querySelector('span').textContent = `${percent}%`
+        }
+    
+        function formatSpeed(bytes) {
+            if(bytes > 1024**2) { // MB/s
+                return `${(bytes/1024**2).toFixed(1)} MB/s`
+            }
+            return `${Math.round(bytes/1024)} KB/s`
+        }
+    
+        // 启动轮询
+        setInterval(updateSystemStatus, 3000)
+        updateSystemStatus() // 立即执行第一次
+    })
+    </script>
+<body>
+    <!-- 通知系统 -->
+    <div class="notification-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="notification {{ category }}">
+                    {{ message }}
+                    <span class="close-btn">&times;</span>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- 内容区块 -->
+    {% block content %}{% endblock %}
+
+    <script>
+        // 自动关闭通知
+        document.querySelectorAll('.notification').forEach(notice => {
+            setTimeout(() => {
+                notice.remove();
+            }, 5000);
+            
+            notice.querySelector('.close-btn').addEventListener('click', () => {
+                notice.remove();
+            });
+        });
+    </script>
+    
+</body>
+</html>

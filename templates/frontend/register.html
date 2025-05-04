@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户注册</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+</head>
+<body>
+    <div class="register-container">
+        <h1 class="register-title">用户注册</h1>
+        <!-- 错误提示容器 -->
+    <div class="error-message" id="globalError" style="display: none;"></div>
+        
+        <!-- Flash消息 -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="error-message" style="display: block;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" id="registerForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <!-- 用户名 -->
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="input-field"
+                    value="{{ username|default('') }}"
+                    required
+                >
+            </div>
+
+            <!-- 密码 -->
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="input-field" 
+                    required
+                >
+            </div>
+
+            <!-- 验证码 -->
+            <div class="form-group">
+                <label>验证码</label>
+                <div class="captcha-group">
+                    <span 
+                        id="captchaText" 
+                        class="captcha-display"
+                        onclick="refreshCaptcha()"
+                    >
+                        {{ captcha }}
+                    </span>
+                    <input 
+                        type="text" 
+                        name="captcha" 
+                        class="input-field"
+                        placeholder="输入验证码"
+                        required
+                    >
+                </div>
+                {% if captcha_error %}
+                    <div class="error-message" style="display: block;">
+                        验证码错误，请重新输入
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- 授权码 -->
+            <div class="form-group">
+                <label for="auth_code">授权码</label>
+                <input 
+                    type="text" 
+                    id="auth_code" 
+                    name="auth_code" 
+                    class="input-field"
+                    value="{{ auth_code|default('') }}"
+                    required
+                >
+            </div>
+            <div class="error-message" id="captchaError" style="display: none;"></div>
+
+            <button type="submit" class="submit-btn">立即注册</button>
+        </form>
+    </div>
+
+    <script>
+        // 异步刷新验证码
+        function refreshCaptcha() {
+            fetch('/refresh-captcha')
+                .then(response => response.json())
+                .then(data => {
+                    const captchaDisplay = document.getElementById('captchaText');
+                    captchaDisplay.textContent = data.captcha;
+                    
+                    // 添加刷新动画
+                    captchaDisplay.style.animation = 'none';
+                    setTimeout(() => {
+                        captchaDisplay.style.animation = 'captchaRefresh 0.6s ease';
+                    }, 10);
+                });
+        }
+
+        // 输入验证
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+    // 获取元素的新方式
+    const captchaInput = document.querySelector('input[name="captcha"]');
+    const errorDisplay = document.getElementById('captchaError'); // 通过ID获取
+    
+    // 添加空值检查
+    if (!captchaInput || !errorDisplay) {
+        console.error('无法找到必要元素');
+        return;
+    }
+    
+    // 验证逻辑
+    if (captchaInput.value.trim().toUpperCase() !== '{{ session.captcha }}') {
+        e.preventDefault();
+        errorDisplay.textContent = '验证码错误，请重新输入';
+        errorDisplay.style.display = 'block';
+        refreshCaptcha();
+        captchaInput.value = '';
+        captchaInput.focus();
+    }
+});
+    </script>
+</body>
+</html>
